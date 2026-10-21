@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cantine YouCode</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: { extend: { colors: { brand: '#2eb82e', ink: '#333333' } } }
+    }
+  </script>
+</head>
+<body class="bg-white font-sans text-ink dark:bg-neutral-900 dark:text-white">
+<div class="app flex min-h-screen flex-col">
+
+  <!-- ===== En-tête ===== -->
+  <header class="site-header relative flex h-28 items-center justify-center bg-ink">
+    <div class="flex items-start gap-1">
+      <img class="h-14 w-auto" src="assets/logo-white.png" width="373" height="96" alt="YouCode">
+      <span class="text-xl text-brand">cantina 🍃</span>
+    </div>
+    <button type="button" class="theme-toggle absolute right-4 top-1/2 -translate-y-1/2 rounded-full border border-neutral-400 px-3 py-1.5 text-xs text-white hover:bg-neutral-600" id="theme-toggle" aria-pressed="false">◐ Mode sombre</button>
+  </header>
+
+  <div class="flex flex-1">
+
+    <!-- ===== Réserve ===== -->
+    <aside class="reserve flex w-64 shrink-0 flex-col bg-ink text-white">
+      <h2 class="reserve__title bg-brand px-4 py-2 text-lg text-ink">Réserve de recettes</h2>
+      <div class="reserve__body flex flex-col gap-2 p-3">
+        <button type="button" class="btn btn--primary w-full bg-brand py-2 text-xs font-semibold text-ink hover:brightness-110" id="add-recipe">+ Ajouter une recette</button>
+
+        <label class="mt-2 text-xs" for="search-input">Rechercher un plat</label>
+        <input class="w-full bg-neutral-500 px-2 py-2 text-xs text-white placeholder-neutral-300" type="search" id="search-input" placeholder="Nom du plat…" autocomplete="off">
+
+        <label class="mt-1 text-xs" for="filter-category">Catégorie</label>
+        <select class="w-full bg-neutral-500 px-2 py-2 text-xs text-white" id="filter-category">
+          <option value="">Toutes</option>
+          <option value="entree">Entrée</option>
+          <option value="plat">Plat principal</option>
+          <option value="dessert">Dessert</option>
+        </select>
+
+<ul class="reserve__list mt-2 flex max-h-[480px] flex-col gap-2 overflow-y-auto" id="reserve-list">
+  <li class="recipe is-assigned flex flex-col gap-1.5 border border-neutral-500 bg-neutral-800 p-3 text-white [&.is-assigned]:opacity-50 [&.is-assigned]:cursor-not-allowed" data-id="r1" data-category="entree" data-name="velouté de légumes" draggable="false">
+    <div class="recipe__top flex items-center justify-between">
+      <span class="badge inline-block rounded-full px-2 py-0.5 text-[11px] font-semibold bg-[#f5b324] text-[#4a3000]">Entrée</span>
+      <span class="recipe__price text-xs text-neutral-300">5 DH</span>
+    </div>
+    <h3 class="recipe__name text-sm font-semibold">Velouté de légumes</h3>
+    <div class="recipe__bottom flex items-center justify-between">
+      <span class="tag inline-block border px-1.5 py-px text-[10px] border-teal-500 text-teal-400">Végétarien</span>
+      <span class="recipe__actions flex gap-1">
+        <button type="button" class="border border-neutral-400 bg-ink px-2 py-1 text-[11px] text-white hover:bg-neutral-600 aria-disabled:cursor-not-allowed aria-disabled:opacity-40" data-action="edit" aria-disabled="true" title="Désassociez d’abord ce plat (option « En réserve ») pour le modifier">Modifier</button>
+        <button type="button" class="border border-neutral-400 bg-ink px-2 py-1 text-[11px] text-white hover:bg-neutral-600 aria-disabled:cursor-not-allowed aria-disabled:opacity-40" data-action="delete" aria-label="Supprimer Velouté de légumes">Supprimer</button>
+      </span>
+    </div>
+    <p class="recipe__state text-[11px]">Assigné : Lundi - Entrée</p>
+  </li>
+  <li class="recipe flex flex-col gap-1.5 border border-neutral-500 bg-neutral-800 p-3 text-white [&.is-assigned]:opacity-50 [&.is-assigned]:cursor-not-allowed cursor-grab" data-id="r2" data-category="entree" data-name="salade marocaine" draggable="true">
+    <div class="recipe__top flex items-center justify-between">
+      <span class="badge inline-block rounded-full px-2 py-0.5 text-[11px] font-semibold bg-[#f5b324] text-[#4a3000]">Entrée</span>
+      <span class="recipe__price text-xs text-neutral-300">6 DH</span>
+    </div>
+    <h3 class="recipe__name text-sm font-semibold">Salade marocaine</h3>
+    <div class="recipe__bottom flex items-center justify-between">
+      <span class="tag inline-block border px-1.5 py-px text-[10px] border-brand text-brand">Bio</span>
+      <span class="recipe__actions flex gap-1">
+        <button type="button" class="border border-neutral-400 bg-ink px-2 py-1 text-[11px] text-white hover:bg-neutral-600 aria-disabled:cursor-not-allowed aria-disabled:opacity-40" data-action="edit">Modifier</button>
+        <button type="button" class="border border-neutral-400 bg-ink px-2 py-1 text-[11px] text-white hover:bg-neutral-600 aria-disabled:cursor-not-allowed aria-disabled:opacity-40" data-action="delete" aria-label="Supprimer Salade marocaine">Supprimer</button>
+      </span>
+    </div>
+  </li>
+  <li class="recipe is-assigned flex flex-col gap-1.5 border border-neutral-500 bg-neutral-800 p-3 text-white [&.is-assigned]:opacity-50 [&.is-assigned]:cursor-not-allowed" data-id="r3" data-category="entree" data-name="harira" draggable="false">
+    <div class="recipe__top flex items-center justify-between">
+      <span class="badge inline-block rounded-full px-2 py-0.5 text-[11px] font-semibold bg-[#f5b324] text-[#4a3000]">Entrée</span>
+      <span class="recipe__price text-xs text-neutral-300">8 DH</span>
+    </div>
+    <h3 class="recipe__name text-sm font-semibold">Harira</h3>
+    <div class="recipe__bottom flex items-center justify-between">
+      <span class="tag inline-block border px-1.5 py-px text-[10px] border-neutral-400 text-neutral-300">Classique</span>
+      <span class="recipe__actions flex gap-1">
+        <button type="button" class="border border-neutral-400 bg-ink px-2 py-1 text-[11px] text-white hover:bg-neutral-600 aria-disabled:cursor-not-allowed aria-disabled:opacity-40" data-action="edit" aria-disabled="true" title="Désassociez d’abord ce plat (option « En réserve ») pour le modifier">Modifier</button>
+        <button type="button" class="border border-neutral-400 bg-ink px-2 py-1 text-[11px] text-white hover:bg-neutral-600 aria-disabled:cursor-not-allowed aria-disabled:opacity-40" data-action="delete" aria-label="Supprimer Harira">Supprimer</button>
+      </span>
+    </div>
+    <p class="recipe__state text-[11px]">Assigné : Mardi - Entrée</p>
+  </li>
+  <li class="recipe is-assigned flex flex-col gap-1.5 border border-neutral-500 bg-neutral-800 p-3 text-white [&.is-assigned]:opacity-50 [&.is-assigned]:cursor-not-allowed" data-id="r4" data-category="plat" data-name="tajine de poulet" draggable="false">
+    <div class="recipe__top flex items-center justify-between">
+      <span class="badge inline-block rounded-full px-2 py-0.5 text-[11px] font-semibold bg-[#ee7b5a] text-white">Plat principal</span>
+      <span class="recipe__price text-xs text-neutral-300">25 DH</span>
+    </div>
+    <h3 class="recipe__name text-sm font-semibold">Tajine de poulet</h3>
+    <div class="recipe__bottom flex items-center justify-between">
+      <span class="tag inline-block border px-1.5 py-px text-[10px] border-neutral-400 text-neutral-300">Classique</span>
+      <span class="recipe__actions flex gap-1">
+        <button type="button" class="border border-neutral-400 bg-ink px-2 py-1 text-[11px] text-white hover:bg-neutral-600 aria-disabled:cursor-not-allowed aria-disabled:opacity-40" data-action="edit" aria-disabled="true" title="Désassociez d’abord ce plat (option « En réserve ») pour le modifier">Modifier</button>
+        <button type="button" class="border border-neutral-400 bg-ink px-2 py-1 text-[11px] text-white hover:bg-neutral-600 aria-disabled:cursor-not-allowed aria-disabled:opacity-40" data-action="delete" aria-label="Supprimer Tajine de poulet">Supprimer</button>
+      </span>
+    </div>
+    <p class="recipe__state text-[11px]">Assigné : Lundi - Plat</p>
+  </li>
+  <li class="recipe is-assigned flex flex-col gap-1.5 border border-neutral-500 bg-neutral-800 p-3 text-white [&.is-assigned]:opacity-50 [&.is-assigned]:cursor-not-allowed" data-id="r5" data-category="plat" data-name="couscous aux légumes" draggable="false">
+    <div class="recipe__top flex items-center justify-between">
+      <span class="badge inline-block rounded-full px-2 py-0.5 text-[11px] font-semibold bg-[#ee7b5a] text-white">Plat principal</span>
+      <span class="recipe__price text-xs text-neutral-300">22 DH</span>
+    </div>
+    <h3 class="recipe__name text-sm font-semibold">Couscous aux légumes</h3>
+    <div class="recipe__bottom flex items-center justify-between">
+      <span class="tag inline-block border px-1.5 py-px text-[10px] border-teal-500 text-teal-400">Végétarien</span>
+      <span class="recipe__actions flex gap-1">
+        <button type="button" class="border border-neutral-400 bg-ink px-2 py-1 text-[11px] text-white hover:bg-neutral-600 aria-disabled:cursor-not-allowed aria-disabled:opacity-40" data-action="edit" aria-disabled="true" title="Désassociez d’abord ce plat (option « En réserve ») pour le modifier">Modifier</button>
+        <button type="button" class="border border-neutral-400 bg-ink px-2 py-1 text-[11px] text-white hover:bg-neutral-600 aria-disabled:cursor-not-allowed aria-disabled:opacity-40" data-action="delete" aria-label="Supprimer Couscous aux légumes">Supprimer</button>
+      </span>
+    </div>
+    <p class="recipe__state text-[11px]">Assigné : Mardi - Plat</p>
+  </li>
+  <li class="recipe flex flex-col gap-1.5 border border-neutral-500 bg-neutral-800 p-3 text-white [&.is-assigned]:opacity-50 [&.is-assigned]:cursor-not-allowed cursor-grab" data-id="r6" data-category="plat" data-name="pastilla au poulet" draggable="true">
+    <div class="recipe__top flex items-center justify-between">
+      <span class="badge inline-block rounded-full px-2 py-0.5 text-[11px] font-semibold bg-[#ee7b5a] text-white">Plat principal</span>
+      <span class="recipe__price text-xs text-neutral-300">30 DH</span>
+    </div>
+    <h3 class="recipe__name text-sm font-semibold">Pastilla au poulet</h3>
+    <div class="recipe__bottom flex items-center justify-between">
+      <span class="tag inline-block border px-1.5 py-px text-[10px] border-neutral-400 text-neutral-300">Classique</span>
+      <span class="recipe__actions flex gap-1">
+        <button type="button" class="border border-neutral-400 bg-ink px-2 py-1 text-[11px] text-white hover:bg-neutral-600 aria-disabled:cursor-not-allowed aria-disabled:opacity-40" data-action="edit">Modifier</button>
+        <button type="button" class="border border-neutral-400 bg-ink px-2 py-1 text-[11px] text-white hover:bg-neutral-600 aria-disabled:cursor-not-allowed aria-disabled:opacity-40" data-action="delete" aria-label="Supprimer Pastilla au poulet">Supprimer</button>
+      </span>
+    </div>
+  </li>
+  <li class="recipe is-assigned flex flex-col gap-1.5 border border-neutral-500 bg-neutral-800 p-3 text-white [&.is-assigned]:opacity-50 [&.is-assigned]:cursor-not-allowed" data-id="r7" data-category="dessert" data-name="fruits de saison" draggable="false">
+    <div class="recipe__top flex items-center justify-between">
+      <span class="badge inline-block rounded-full px-2 py-0.5 text-[11px] font-semibold bg-[#a99bf0] text-[#2a1f6b]">Dessert</span>
+      <span class="recipe__price text-xs text-neutral-300">10 DH</span>
+    </div>
+    <h3 class="recipe__name text-sm font-semibold">Fruits de saison</h3>
+    <div class="recipe__bottom flex items-center justify-between">
+      <span class="tag inline-block border px-1.5 py-px text-[10px] border-brand text-brand">Bio</span>
+      <span class="recipe__actions flex gap-1">
+        <button type="button" class="border border-neutral-400 bg-ink px-2 py-1 text-[11px] text-white hover:bg-neutral-600 aria-disabled:cursor-not-allowed aria-disabled:opacity-40" data-action="edit" aria-disabled="true" title="Désassociez d’abord ce plat (option « En réserve ») pour le modifier">Modifier</button>
+        <button type="button" class="border border-neutral-400 bg-ink px-2 py-1 text-[11px] text-white hover:bg-neutral-600 aria-disabled:cursor-not-allowed aria-disabled:opacity-40" data-action="delete" aria-label="Supprimer Fruits de saison">Supprimer</button>
+      </span>
+    </div>
+    <p class="recipe__state text-[11px]">Assigné : Lundi - Dessert</p>
+  </li>
+  <li class="recipe flex flex-col gap-1.5 border border-neutral-500 bg-neutral-800 p-3 text-white [&.is-assigned]:opacity-50 [&.is-assigned]:cursor-not-allowed cursor-grab" data-id="r8" data-category="dessert" data-name="salade de fruits" draggable="true">
+    <div class="recipe__top flex items-center justify-between">
+      <span class="badge inline-block rounded-full px-2 py-0.5 text-[11px] font-semibold bg-[#a99bf0] text-[#2a1f6b]">Dessert</span>
+      <span class="recipe__price text-xs text-neutral-300">8 DH</span>
+    </div>
+    <h3 class="recipe__name text-sm font-semibold">Salade de fruits</h3>
+    <div class="recipe__bottom flex items-center justify-between">
+      <span class="tag inline-block border px-1.5 py-px text-[10px] border-teal-500 text-teal-400">Végétarien</span>
+      <span class="recipe__actions flex gap-1">
+        <button type="button" class="border border-neutral-400 bg-ink px-2 py-1 text-[11px] text-white hover:bg-neutral-600 aria-disabled:cursor-not-allowed aria-disabled:opacity-40" data-action="edit">Modifier</button>
+        <button type="button" class="border border-neutral-400 bg-ink px-2 py-1 text-[11px] text-white hover:bg-neutral-600 aria-disabled:cursor-not-allowed aria-disabled:opacity-40" data-action="delete" aria-label="Supprimer Salade de fruits">Supprimer</button>
+      </span>
+    </div>
+  </li>
+  <li class="recipe flex flex-col gap-1.5 border border-neutral-500 bg-neutral-800 p-3 text-white [&.is-assigned]:opacity-50 [&.is-assigned]:cursor-not-allowed cursor-grab" data-id="r9" data-category="dessert" data-name="crème caramel" draggable="true">
+    <div class="recipe__top flex items-center justify-between">
+      <span class="badge inline-block rounded-full px-2 py-0.5 text-[11px] font-semibold bg-[#a99bf0] text-[#2a1f6b]">Dessert</span>
+      <span class="recipe__price text-xs text-neutral-300">7 DH</span>
+    </div>
+    <h3 class="recipe__name text-sm font-semibold">Crème caramel</h3>
+    <div class="recipe__bottom flex items-center justify-between">
+      <span class="tag inline-block border px-1.5 py-px text-[10px] border-neutral-400 text-neutral-300">Classique</span>
+      <span class="recipe__actions flex gap-1">
+        <button type="button" class="border border-neutral-400 bg-ink px-2 py-1 text-[11px] text-white hover:bg-neutral-600 aria-disabled:cursor-not-allowed aria-disabled:opacity-40" data-action="edit">Modifier</button>
+        <button type="button" class="border border-neutral-400 bg-ink px-2 py-1 text-[11px] text-white hover:bg-neutral-600 aria-disabled:cursor-not-allowed aria-disabled:opacity-40" data-action="delete" aria-label="Supprimer Crème caramel">Supprimer</button>
+      </span>
+    </div>
+  </li>
+</ul>
+<p class="reserve__empty mt-2 text-xs text-neutral-300 [&[hidden]]:hidden" id="reserve-empty" hidden>Aucune recette ne correspond. Ajoutez-en une avec le bouton ci-dessus.</p>
+      </div>
+
+      <img class="reserve__photo mt-auto h-auto w-full object-cover" src="assets/pizza-salad-delicious-spaghetti-36260396.webp" width="520" height="345" alt="Assortiment de plats de la cantine : pizza, salade et pâtes" loading="lazy">
+    </aside>
+
+    <div class="flex min-w-0 flex-1 flex-col">
+
+<!-- ===== Planning ===== -->
+<main class="main flex-1 px-10 py-6" id="planning">
+  <div class="dashboard">
+    <h2 class="main__title mb-3 text-2xl">Menu de la semaine</h2>
+
+    <dl class="stats grid grid-cols-2 gap-3 lg:grid-cols-4" aria-label="Résumé de la semaine">
+      <div class="stat border-l-4 border-brand bg-neutral-100 px-3 py-3 dark:bg-neutral-800 flex flex-col"><dt class="order-2 text-[11px] text-neutral-500 dark:text-neutral-400">Plats en réserve</dt><dd class="order-1 text-lg font-bold" id="stat-reserve">4</dd></div>
+      <div class="stat border-l-4 border-brand bg-neutral-100 px-3 py-3 dark:bg-neutral-800 flex flex-col"><dt class="order-2 text-[11px] text-neutral-500 dark:text-neutral-400">Jours prêts</dt><dd class="order-1 text-lg font-bold" id="stat-ready">1/5</dd></div>
+      <div class="stat border-l-4 border-brand bg-neutral-100 px-3 py-3 dark:bg-neutral-800 flex flex-col"><dt class="order-2 text-[11px] text-neutral-500 dark:text-neutral-400">Coût de la semaine par apprenant</dt><dd class="order-1 text-lg font-bold" id="stat-week">70 DH</dd></div>
+      <div class="stat border-l-4 border-brand bg-neutral-100 px-3 py-3 dark:bg-neutral-800 flex flex-col"><dt class="order-2 text-[11px] text-neutral-500 dark:text-neutral-400">Équilibre alimentaire</dt>
+        <dd class="order-1"><span class="balance balance--ok inline-block bg-brand px-1.5 py-0.5 text-[11px] text-ink" id="stat-balance">Au moins 1 plat végétarien</span></dd>
+      </div>
+    </dl>
+
+    <div class="toolbar mt-4 flex flex-wrap items-center gap-2">
+      <div class="view-switch inline-flex border-2 border-ink" role="group" aria-label="Affichage du menu">
+        <button type="button" class="view-switch__btn is-active bg-white px-3 py-2 text-xs font-semibold text-ink [&.is-active]:bg-ink [&.is-active]:text-white" data-view="cards" aria-pressed="true">Vue cartes</button>
+        <button type="button" class="view-switch__btn bg-white px-3 py-2 text-xs font-semibold text-ink [&.is-active]:bg-ink [&.is-active]:text-white" data-view="table" aria-pressed="false">Vue tableau</button>
+      </div>
+      <button type="button" class="btn btn--ghost border-2 border-ink bg-white px-4 py-2 text-xs font-semibold text-ink hover:bg-neutral-100" id="auto-fill">Compléter la semaine</button>
+      <button type="button" class="btn btn--ghost border-2 border-ink bg-white px-4 py-2 text-xs font-semibold text-ink hover:bg-neutral-100 [&[hidden]]:hidden" id="print-menu" hidden>Imprimer le menu</button>
+    </div>
+  </div>
+
+  <section class="planning mt-10 grid grid-cols-1 justify-center gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-[repeat(5,15rem)] xl:gap-12" id="cards-view" aria-label="Menu du lundi au vendredi">
+  <article class="day is-ready group flex flex-col" data-day="lundi" aria-labelledby="lundi-title">
+    <h3 class="day__title bg-brand py-1 text-center text-lg text-ink group-[.is-ready]:after:content-['_✓']" id="lundi-title">Lundi</h3>
+    <div class="day__body flex min-h-[340px] flex-1 flex-col gap-3 bg-ink p-3 text-white">
+      <div class="slot flex flex-col gap-1.5" data-slot="entree">
+        <div class="slot__head flex items-center justify-between">
+          <label class="badge inline-block rounded-full px-2 py-0.5 text-[11px] font-semibold bg-[#f5b324] text-[#4a3000]" for="lundi-entree">Entrée</label>
+          <output class="slot__price text-xs font-bold" for="lundi-entree">+5 DH</output>
+        </div>
+        <select id="lundi-entree" class="slot__select w-full bg-neutral-500 px-2 py-2 text-xs text-white focus:outline focus:outline-2 focus:outline-brand" data-day="lundi" data-slot="entree">
+          <option value="">En réserve</option>
+          <option value="r1" selected>Velouté de légumes (+5 DH)</option>
+          <option value="r2">Salade marocaine (+6 DH)</option>
+          <option value="r3">Harira (+8 DH)</option>
+        </select>
+      </div>
+      <div class="slot flex flex-col gap-1.5" data-slot="plat">
+        <div class="slot__head flex items-center justify-between">
+          <label class="badge inline-block rounded-full px-2 py-0.5 text-[11px] font-semibold bg-[#ee7b5a] text-white" for="lundi-plat">Plat principal</label>
+          <output class="slot__price text-xs font-bold" for="lundi-plat">+25 DH</output>
+        </div>
+        <select id="lundi-plat" class="slot__select w-full bg-neutral-500 px-2 py-2 text-xs text-white focus:outline focus:outline-2 focus:outline-brand" data-day="lundi" data-slot="plat">
+          <option value="">En réserve</option>
+          <option value="r4" selected>Tajine de poulet (+25 DH)</option>
+          <option value="r5">Couscous aux légumes (+22 DH)</option>
+          <option value="r6">Pastilla au poulet (+30 DH)</option>
+        </select>
+      </div>
+      <div class="slot flex flex-col gap-1.5" data-slot="dessert">
+        <div class="slot__head flex items-center justify-between">
+          <label class="badge inline-block rounded-full px-2 py-0.5 text-[11px] font-semibold bg-[#a99bf0] text-[#2a1f6b]" for="lundi-dessert">Dessert</label>
+          <output class="slot__price text-xs font-bold" for="lundi-dessert">+10 DH</output>
+        </div>
+        <select id="lundi-dessert" class="slot__select w-full bg-neutral-500 px-2 py-2 text-xs text-white focus:outline focus:outline-2 focus:outline-brand" data-day="lundi" data-slot="dessert">
+          <option value="">En réserve</option>
+          <option value="r7" selected>Fruits de saison (+10 DH)</option>
+          <option value="r8">Salade de fruits (+8 DH)</option>
+          <option value="r9">Crème caramel (+7 DH)</option>
+        </select>
+      </div>
+      <div class="day__total mt-auto">
+        <p class="day__sum text-xs">Total jour : <strong class="text-sm" data-total>40 DH</strong> / 50 DH max</p>
+        <div class="gauge mt-1.5 h-1.5 w-full bg-neutral-500" role="progressbar" aria-label="Budget de Lundi" aria-valuemin="0" aria-valuemax="50" aria-valuenow="40"><span class="block h-full bg-brand" style="width:80%"></span></div>
+      </div>
+    </div>
+  </article>
+  <article class="day group flex flex-col" data-day="mardi" aria-labelledby="mardi-title">
+    <h3 class="day__title bg-brand py-1 text-center text-lg text-ink group-[.is-ready]:after:content-['_✓']" id="mardi-title">Mardi</h3>
+    <div class="day__body flex min-h-[340px] flex-1 flex-col gap-3 bg-ink p-3 text-white">
+      <div class="slot flex flex-col gap-1.5" data-slot="entree">
+        <div class="slot__head flex items-center justify-between">
+          <label class="badge inline-block rounded-full px-2 py-0.5 text-[11px] font-semibold bg-[#f5b324] text-[#4a3000]" for="mardi-entree">Entrée</label>
+          <output class="slot__price text-xs font-bold" for="mardi-entree">+8 DH</output>
+        </div>
+        <select id="mardi-entree" class="slot__select w-full bg-neutral-500 px-2 py-2 text-xs text-white focus:outline focus:outline-2 focus:outline-brand" data-day="mardi" data-slot="entree">
+          <option value="">En réserve</option>
+          <option value="r1">Velouté de légumes (+5 DH)</option>
+          <option value="r2">Salade marocaine (+6 DH)</option>
+          <option value="r3" selected>Harira (+8 DH)</option>
+        </select>
+      </div>
+      <div class="slot flex flex-col gap-1.5" data-slot="plat">
+        <div class="slot__head flex items-center justify-between">
+          <label class="badge inline-block rounded-full px-2 py-0.5 text-[11px] font-semibold bg-[#ee7b5a] text-white" for="mardi-plat">Plat principal</label>
+          <output class="slot__price text-xs font-bold" for="mardi-plat">+22 DH</output>
+        </div>
+        <select id="mardi-plat" class="slot__select w-full bg-neutral-500 px-2 py-2 text-xs text-white focus:outline focus:outline-2 focus:outline-brand" data-day="mardi" data-slot="plat">
+          <option value="">En réserve</option>
+          <option value="r4">Tajine de poulet (+25 DH)</option>
+          <option value="r5" selected>Couscous aux légumes (+22 DH)</option>
+          <option value="r6">Pastilla au poulet (+30 DH)</option>
+        </select>
+      </div>
+      <div class="slot flex flex-col gap-1.5" data-slot="dessert">
+        <div class="slot__head flex items-center justify-between">
+          <label class="badge inline-block rounded-full px-2 py-0.5 text-[11px] font-semibold bg-[#a99bf0] text-[#2a1f6b]" for="mardi-dessert">Dessert</label>
+          <output class="slot__price text-xs font-bold" for="mardi-dessert">–</output>
+        </div>
+        <select id="mardi-dessert" class="slot__select w-full bg-neutral-500 px-2 py-2 text-xs text-white focus:outline focus:outline-2 focus:outline-brand" data-day="mardi" data-slot="dessert">
+          <option value="">En réserve</option>
+          <option value="r7">Fruits de saison (+10 DH)</option>
+          <option value="r8">Salade de fruits (+8 DH)</option>
+          <option value="r9">Crème caramel (+7 DH)</option>
+        </select>
+      </div>
+      <div class="day__total mt-auto">
+        <p class="day__sum text-xs">Total jour : <strong class="text-sm" data-total>30 DH</strong> / 50 DH max</p>
+        <div class="gauge mt-1.5 h-1.5 w-full bg-neutral-500" role="progressbar" aria-label="Budget de Mardi" aria-valuemin="0" aria-valuemax="50" aria-valuenow="30"><span class="block h-full bg-brand" style="width:60%"></span></div>
+      </div>
+    </div>
+  </article>
+  <article class="day group flex flex-col" data-day="mercredi" aria-labelledby="mercredi-title">
+    <h3 class="day__title bg-brand py-1 text-center text-lg text-ink group-[.is-ready]:after:content-['_✓']" id="mercredi-title">Mercredi</h3>
+    <div class="day__body flex min-h-[340px] flex-1 flex-col gap-3 bg-ink p-3 text-white">
+      <div class="slot flex flex-col gap-1.5" data-slot="entree">
+        <div class="slot__head flex items-center justify-between">
+          <label class="badge inline-block rounded-full px-2 py-0.5 text-[11px] font-semibold bg-[#f5b324] text-[#4a3000]" for="mercredi-entree">Entrée</label>
+          <output class="slot__price text-xs font-bold" for="mercredi-entree">–</output>
+        </div>
+        <select id="mercredi-entree" class="slot__select w-full bg-neutral-500 px-2 py-2 text-xs text-white focus:outline focus:outline-2 focus:outline-brand" data-day="mercredi" data-slot="entree">
+          <option value="">En réserve</option>
+          <option value="r1">Velouté de légumes (+5 DH)</option>
+          <option value="r2">Salade marocaine (+6 DH)</option>
+          <option value="r3">Harira (+8 DH)</option>
+        </select>
+      </div>
+      <div class="slot flex flex-col gap-1.5" data-slot="plat">
+        <div class="slot__head flex items-center justify-between">
+          <label class="badge inline-block rounded-full px-2 py-0.5 text-[11px] font-semibold bg-[#ee7b5a] text-white" for="mercredi-plat">Plat principal</label>
+          <output class="slot__price text-xs font-bold" for="mercredi-plat">–</output>
+        </div>
+        <select id="mercredi-plat" class="slot__select w-full bg-neutral-500 px-2 py-2 text-xs text-white focus:outline focus:outline-2 focus:outline-brand" data-day="mercredi" data-slot="plat">
+          <option value="">En réserve</option>
+          <option value="r4">Tajine de poulet (+25 DH)</option>
+          <option value="r5">Couscous aux légumes (+22 DH)</option>
+          <option value="r6">Pastilla au poulet (+30 DH)</option>
+        </select>
+      </div>
+      <div class="slot flex flex-col gap-1.5" data-slot="dessert">
+        <div class="slot__head flex items-center justify-between">
+          <label class="badge inline-block rounded-full px-2 py-0.5 text-[11px] font-semibold bg-[#a99bf0] text-[#2a1f6b]" for="mercredi-dessert">Dessert</label>
+          <output class="slot__price text-xs font-bold" for="mercredi-dessert">–</output>
+        </div>
+        <select id="mercredi-dessert" class="slot__select w-full bg-neutral-500 px-2 py-2 text-xs text-white focus:outline focus:outline-2 focus:outline-brand" data-day="mercredi" data-slot="dessert">
+          <option value="">En réserve</option>
+          <option value="r7">Fruits de saison (+10 DH)</option>
+          <option value="r8">Salade de fruits (+8 DH)</option>
+          <option value="r9">Crème caramel (+7 DH)</option>
+        </select>
+      </div>
+      <div class="day__total mt-auto">
+        <p class="day__sum text-xs">Total jour : <strong class="text-sm" data-total>0 DH</strong> / 50 DH max</p>
+        <div class="gauge mt-1.5 h-1.5 w-full bg-neutral-500" role="progressbar" aria-label="Budget de Mercredi" aria-valuemin="0" aria-valuemax="50" aria-valuenow="0"><span class="block h-full bg-brand" style="width:0%"></span></div>
+      </div>
+    </div>
+  </article>
+  <article class="day group flex flex-col" data-day="jeudi" aria-labelledby="jeudi-title">
+    <h3 class="day__title bg-brand py-1 text-center text-lg text-ink group-[.is-ready]:after:content-['_✓']" id="jeudi-title">Jeudi</h3>
+    <div class="day__body flex min-h-[340px] flex-1 flex-col gap-3 bg-ink p-3 text-white">
+      <div class="slot flex flex-col gap-1.5" data-slot="entree">
+        <div class="slot__head flex items-center justify-between">
+          <label class="badge inline-block rounded-full px-2 py-0.5 text-[11px] font-semibold bg-[#f5b324] text-[#4a3000]" for="jeudi-entree">Entrée</label>
+          <output class="slot__price text-xs font-bold" for="jeudi-entree">–</output>
+        </div>
+        <select id="jeudi-entree" class="slot__select w-full bg-neutral-500 px-2 py-2 text-xs text-white focus:outline focus:outline-2 focus:outline-brand" data-day="jeudi" data-slot="entree">
+          <option value="">En réserve</option>
+          <option value="r1">Velouté de légumes (+5 DH)</option>
+          <option value="r2">Salade marocaine (+6 DH)</option>
+          <option value="r3">Harira (+8 DH)</option>
+        </select>
+      </div>
+      <div class="slot flex flex-col gap-1.5" data-slot="plat">
+        <div class="slot__head flex items-center justify-between">
+          <label class="badge inline-block rounded-full px-2 py-0.5 text-[11px] font-semibold bg-[#ee7b5a] text-white" for="jeudi-plat">Plat principal</label>
+          <output class="slot__price text-xs font-bold" for="jeudi-plat">–</output>
+        </div>
+        <select id="jeudi-plat" class="slot__select w-full bg-neutral-500 px-2 py-2 text-xs text-white focus:outline focus:outline-2 focus:outline-brand" data-day="jeudi" data-slot="plat">
+          <option value="">En réserve</option>
+          <option value="r4">Tajine de poulet (+25 DH)</option>
+          <option value="r5">Couscous aux légumes (+22 DH)</option>
+          <option value="r6">Pastilla au poulet (+30 DH)</option>
+        </select>
+      </div>
+      <div class="slot flex flex-col gap-1.5" data-slot="dessert">
+        <div class="slot__head flex items-center justify-between">
+          <label class="badge inline-block rounded-full px-2 py-0.5 text-[11px] font-semibold bg-[#a99bf0] text-[#2a1f6b]" for="jeudi-dessert">Dessert</label>
+          <output class="slot__price text-xs font-bold" for="jeudi-dessert">–</output>
+        </div>
+        <select id="jeudi-dessert" class="slot__select w-full bg-neutral-500 px-2 py-2 text-xs text-white focus:outline focus:outline-2 focus:outline-brand" data-day="jeudi" data-slot="dessert">
+          <option value="">En réserve</option>
+          <option value="r7">Fruits de saison (+10 DH)</option>
+          <option value="r8">Salade de fruits (+8 DH)</option>
+          <option value="r9">Crème caramel (+7 DH)</option>
+        </select>
+      </div>
+      <div class="day__total mt-auto">
+        <p class="day__sum text-xs">Total jour : <strong class="text-sm" data-total>0 DH</strong> / 50 DH max</p>
+        <div class="gauge mt-1.5 h-1.5 w-full bg-neutral-500" role="progressbar" aria-label="Budget de Jeudi" aria-valuemin="0" aria-valuemax="50" aria-valuenow="0"><span class="block h-full bg-brand" style="width:0%"></span></div>
+      </div>
+    </div>
+  </article>
+  <article class="day group flex flex-col" data-day="vendredi" aria-labelledby="vendredi-title">
+    <h3 class="day__title bg-brand py-1 text-center text-lg text-ink group-[.is-ready]:after:content-['_✓']" id="vendredi-title">Vendredi</h3>
+    <div class="day__body flex min-h-[340px] flex-1 flex-col gap-3 bg-ink p-3 text-white">
+      <div class="slot flex flex-col gap-1.5" data-slot="entree">
+        <div class="slot__head flex items-center justify-between">
+          <label class="badge inline-block rounded-full px-2 py-0.5 text-[11px] font-semibold bg-[#f5b324] text-[#4a3000]" for="vendredi-entree">Entrée</label>
+          <output class="slot__price text-xs font-bold" for="vendredi-entree">–</output>
+        </div>
+        <select id="vendredi-entree" class="slot__select w-full bg-neutral-500 px-2 py-2 text-xs text-white focus:outline focus:outline-2 focus:outline-brand" data-day="vendredi" data-slot="entree">
+          <option value="">En réserve</option>
+          <option value="r1">Velouté de légumes (+5 DH)</option>
+          <option value="r2">Salade marocaine (+6 DH)</option>
+          <option value="r3">Harira (+8 DH)</option>
+        </select>
+      </div>
+      <div class="slot flex flex-col gap-1.5" data-slot="plat">
+        <div class="slot__head flex items-center justify-between">
+          <label class="badge inline-block rounded-full px-2 py-0.5 text-[11px] font-semibold bg-[#ee7b5a] text-white" for="vendredi-plat">Plat principal</label>
+          <output class="slot__price text-xs font-bold" for="vendredi-plat">–</output>
+        </div>
+        <select id="vendredi-plat" class="slot__select w-full bg-neutral-500 px-2 py-2 text-xs text-white focus:outline focus:outline-2 focus:outline-brand" data-day="vendredi" data-slot="plat">
+          <option value="">En réserve</option>
+          <option value="r4">Tajine de poulet (+25 DH)</option>
+          <option value="r5">Couscous aux légumes (+22 DH)</option>
+          <option value="r6">Pastilla au poulet (+30 DH)</option>
+        </select>
+      </div>
+      <div class="slot flex flex-col gap-1.5" data-slot="dessert">
+        <div class="slot__head flex items-center justify-between">
+          <label class="badge inline-block rounded-full px-2 py-0.5 text-[11px] font-semibold bg-[#a99bf0] text-[#2a1f6b]" for="vendredi-dessert">Dessert</label>
+          <output class="slot__price text-xs font-bold" for="vendredi-dessert">–</output>
+        </div>
+        <select id="vendredi-dessert" class="slot__select w-full bg-neutral-500 px-2 py-2 text-xs text-white focus:outline focus:outline-2 focus:outline-brand" data-day="vendredi" data-slot="dessert">
+          <option value="">En réserve</option>
+          <option value="r7">Fruits de saison (+10 DH)</option>
+          <option value="r8">Salade de fruits (+8 DH)</option>
+          <option value="r9">Crème caramel (+7 DH)</option>
+        </select>
+      </div>
+      <div class="day__total mt-auto">
+        <p class="day__sum text-xs">Total jour : <strong class="text-sm" data-total>0 DH</strong> / 50 DH max</p>
+        <div class="gauge mt-1.5 h-1.5 w-full bg-neutral-500" role="progressbar" aria-label="Budget de Vendredi" aria-valuemin="0" aria-valuemax="50" aria-valuenow="0"><span class="block h-full bg-brand" style="width:0%"></span></div>
+      </div>
+    </div>
+  </article>
+  </section>
+
+  <section class="table-view mt-6 overflow-x-auto [&[hidden]]:hidden" id="table-view" aria-label="Menu officiel de la semaine" hidden>
+    <table class="menu-table w-full text-sm">
+      <caption class="p-3 text-left font-bold">Menu officiel de la cantine YouCode</caption>
+      <thead class="bg-ink text-white">
+        <tr><th scope="col" class="px-3 py-2 text-left">Jour</th><th scope="col" class="px-3 py-2 text-left">Entrée</th><th scope="col" class="px-3 py-2 text-left">Plat principal</th><th scope="col" class="px-3 py-2 text-left">Dessert</th><th scope="col" class="px-3 py-2 text-left">Total</th></tr>
+      </thead>
+      <tbody>
+        <tr class="border-b border-neutral-300"><th scope="row" class="px-3 py-2 text-left">Lundi</th><td class="px-3 py-2">Velouté de légumes</td><td class="px-3 py-2">Tajine de poulet</td><td class="px-3 py-2">Fruits de saison</td><td class="px-3 py-2 font-semibold">40 DH</td></tr>
+        <tr class="border-b border-neutral-300"><th scope="row" class="px-3 py-2 text-left">Mardi</th><td class="px-3 py-2">Harira</td><td class="px-3 py-2">Couscous aux légumes</td><td class="px-3 py-2">–</td><td class="px-3 py-2 font-semibold">30 DH</td></tr>
+        <tr class="border-b border-neutral-300"><th scope="row" class="px-3 py-2 text-left">Mercredi</th><td class="px-3 py-2">–</td><td class="px-3 py-2">–</td><td class="px-3 py-2">–</td><td class="px-3 py-2 font-semibold">0 DH</td></tr>
+        <tr class="border-b border-neutral-300"><th scope="row" class="px-3 py-2 text-left">Jeudi</th><td class="px-3 py-2">–</td><td class="px-3 py-2">–</td><td class="px-3 py-2">–</td><td class="px-3 py-2 font-semibold">0 DH</td></tr>
+        <tr class="border-b border-neutral-300"><th scope="row" class="px-3 py-2 text-left">Vendredi</th><td class="px-3 py-2">–</td><td class="px-3 py-2">–</td><td class="px-3 py-2">–</td><td class="px-3 py-2 font-semibold">0 DH</td></tr>
+      </tbody>
+    </table>
+  </section>
+</main>
+
+<!-- ===== Pied de page ===== -->
+<footer class="site-footer relative flex h-36 items-center justify-center bg-ink">
+  <img class="site-footer__logo h-16 w-auto" src="assets/logo-white.png" width="373" height="96" alt="YouCode" loading="lazy">
+  <p class="site-footer__copy absolute bottom-1 right-2 text-[10px] text-white">YouCode © 2026</p>
+</footer>
+
+    </div>
+  </div>
+</div>
+
+<!-- ===== Fenêtre modale : ajout / modification ===== -->
+<div class="modal-overlay fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 [&[hidden]]:hidden" id="modal-overlay" hidden>
+  <div class="modal w-full max-w-md bg-white p-6 text-ink shadow-xl" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+    <header class="modal__header mb-4 flex items-center justify-between">
+      <h2 class="text-xl font-bold" id="modal-title">Ajouter une recette</h2>
+      <button type="button" class="modal__close text-2xl leading-none text-neutral-500 hover:text-ink" data-close aria-label="Fermer la fenêtre">×</button>
+    </header>
+
+    <form class="modal__form flex flex-col gap-4" id="recipe-form" novalidate>
+      <input type="hidden" id="recipe-id" name="id">
+
+      <div class="field">
+        <label class="mb-1 block text-sm font-medium" for="recipe-name">Nom du plat</label>
+        <input class="w-full border border-neutral-300 px-3 py-2 text-sm focus:outline focus:outline-2 focus:outline-brand aria-[invalid=true]:border-red-500" type="text" id="recipe-name" name="name" minlength="3" maxlength="30" required aria-describedby="error-name" aria-invalid="false" autocomplete="off">
+        <p class="field__error min-h-4 text-xs text-red-600" id="error-name" role="alert"></p>
+      </div>
+
+      <div class="field">
+        <label class="mb-1 block text-sm font-medium" for="recipe-category">Catégorie</label>
+        <select class="w-full border border-neutral-300 px-3 py-2 text-sm focus:outline focus:outline-2 focus:outline-brand aria-[invalid=true]:border-red-500 bg-white" id="recipe-category" name="category" required aria-describedby="error-category" aria-invalid="false">
+          <option value="">Choisir une catégorie</option>
+          <option value="entree">Entrée</option>
+          <option value="plat">Plat principal</option>
+          <option value="dessert">Dessert</option>
+        </select>
+        <p class="field__error min-h-4 text-xs text-red-600" id="error-category" role="alert"></p>
+      </div>
+
+      <div class="field">
+        <label class="mb-1 block text-sm font-medium" for="recipe-price">Prix (DH)</label>
+        <input class="w-full border border-neutral-300 px-3 py-2 text-sm focus:outline focus:outline-2 focus:outline-brand aria-[invalid=true]:border-red-500" type="text" inputmode="decimal" id="recipe-price" name="price" required aria-describedby="error-price" aria-invalid="false" autocomplete="off">
+        <p class="field__error min-h-4 text-xs text-red-600" id="error-price" role="alert"></p>
+      </div>
+
+      <fieldset class="field field--choices flex flex-wrap gap-4">
+        <legend class="mb-1 text-sm font-medium">Badge qualitatif</legend>
+        <label class="choice flex items-center gap-1.5 text-sm"><input type="radio" name="tag" value="bio"> Bio</label>
+        <label class="choice flex items-center gap-1.5 text-sm"><input type="radio" name="tag" value="veg"> Végétarien</label>
+        <label class="choice flex items-center gap-1.5 text-sm"><input type="radio" name="tag" value="classique" checked> Classique</label>
+      </fieldset>
+
+      <footer class="modal__actions mt-6 flex justify-end gap-2">
+        <button type="button" class="btn btn--ghost-dark border border-neutral-400 px-4 py-2 text-sm hover:bg-neutral-100" data-close>Annuler</button>
+        <button type="submit" class="btn btn--primary bg-brand px-4 py-2 text-sm font-semibold text-ink hover:brightness-110 disabled:cursor-not-allowed disabled:opacity-50" id="recipe-submit" disabled>Enregistrer</button>
+      </footer>
+    </form>
+  </div>
+</div>
+
+<!-- ===== Confirmation de suppression ===== -->
+<div class="modal-overlay fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 [&[hidden]]:hidden" id="confirm-overlay" hidden>
+  <div class="modal w-full max-w-md bg-white p-6 text-ink shadow-xl max-w-sm" role="alertdialog" aria-modal="true" aria-labelledby="confirm-title" aria-describedby="confirm-text">
+    <header class="modal__header mb-4 flex items-center justify-between">
+      <h2 class="text-xl font-bold" id="confirm-title">Confirmer la suppression</h2>
+      <button type="button" class="modal__close text-2xl leading-none text-neutral-500 hover:text-ink" data-close aria-label="Fermer la fenêtre">×</button>
+    </header>
+    <p class="modal__text text-sm text-neutral-600" id="confirm-text">Voulez-vous vraiment supprimer cette recette ? Cette action est définitive.</p>
+    <footer class="modal__actions mt-6 flex justify-end gap-2">
+      <button type="button" class="btn btn--ghost-dark border border-neutral-400 px-4 py-2 text-sm hover:bg-neutral-100" data-close>Annuler</button>
+      <button type="button" class="btn btn--danger bg-red-600 px-4 py-2 text-sm font-semibold text-white hover:bg-red-700" id="confirm-ok">Supprimer</button>
+    </footer>
+  </div>
+</div>
+
+<!-- ===== Toasts ===== -->
+<div class="toast-region fixed bottom-4 right-4 z-50 flex flex-col gap-2" id="toast-region" aria-live="polite" aria-atomic="false"></div>
+<template id="toast-template">
+  <div class="toast flex items-start gap-3 bg-ink px-4 py-3 text-sm text-white shadow-lg" role="status">
+    <p class="toast__text"></p>
+    <button type="button" class="toast__close text-lg leading-none text-neutral-300 hover:text-white" aria-label="Fermer la notification">×</button>
+  </div>
+</template>
+
+<!-- Ajouter ici : <script src="js/app.js" defer></script> -->
+</body>
+</html>
+
+    
+       
